@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Attempt to execute the prepared statement
             if ($stmt->execute()) {
                 if ($stmt->rowCount() == 1) {
-                    $username_err = "Denne e-mail er allerede taget.";
+                    $username_err = "This e-mail is already taken.";
                 } else {
                     $username = trim($_POST["username"]);
                 }
@@ -108,18 +108,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($navn_err) && empty($efternavn_err) && empty($tlf_err) && empty($postnr_err) && empty($land_err) && empty($by_err)) {
 
         // Prepare an insert statement
-        $sql = "INSERT INTO users (username, password, fornavn, efternavn, tlfnr, land, postnr, city) VALUES (:username, :password, :fornavn, :efternavn, :tlfnr, :land, :postnr, :city)";
-
+        $sql = "INSERT INTO user (UserEmail, UserPassword, UserFirstName, UserLastName, UserPhoneNo) VALUES (:UserEmail, :UserPassword, :UserFirstName, :UserLastName, :UserPhoneNo)
+                INSERT INTO useraddress (country_CountryID, UserPostNo, UserCity) VALUES (:country_CountryID, :UserPostNo, :UserCity)";
+        
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            $stmt->bindParam(":password", $param_password, PDO::PARAM_STR);
-            $stmt->bindParam(":fornavn", $param_navn, PDO::PARAM_STR);
-            $stmt->bindParam(":efternavn", $param_efternavn, PDO::PARAM_STR);
-            $stmt->bindParam(":tlfnr", $param_tlf, PDO::PARAM_STR);
-            $stmt->bindParam(":land", $param_land, PDO::PARAM_STR);
-            $stmt->bindParam(":city", $param_by, PDO::PARAM_STR);
-            $stmt->bindParam(":postnr", $param_postnr, PDO::PARAM_STR);
+            $stmt->bindParam(":UserEmail", $param_username, PDO::PARAM_STR);
+            $stmt->bindParam(":UserPassword", $param_password, PDO::PARAM_STR);
+            $stmt->bindParam(":UserFirstName", $param_navn, PDO::PARAM_STR);
+            $stmt->bindParam(":UserLastName", $param_efternavn, PDO::PARAM_STR);
+            $stmt->bindParam(":UserPhoneNo", $param_tlf, PDO::PARAM_STR);
+            $stmt->bindParam(":country_CountryID", $param_land, PDO::PARAM_STR);
+            $stmt->bindParam(":UserCity", $param_by, PDO::PARAM_STR);
+            $stmt->bindParam(":UserPostNo", $param_postnr, PDO::PARAM_STR);
 
             // Set parameters
             $param_username = $username;

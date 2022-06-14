@@ -2,13 +2,12 @@
 
 function open_database_connection()
 {
-    // $connection = new PDO("mysql:host=localhost;dbname=visitfyndb", 'myuser', 'mypassword');
-
+   
     // return $connection;
     define('DB_SERVER', 'localhost');
     define('DB_USERNAME', 'myuser');
     define('DB_PASSWORD', 'mypassword');
-    define('DB_NAME', 'visitfyndb');
+    define('DB_NAME', 'ikea_hacks_db');
 
     /* Attempt to connect to MySQL database */
 

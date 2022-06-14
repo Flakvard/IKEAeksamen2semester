@@ -7,7 +7,7 @@ class config
 		$this->host = "localhost";
 		$this->user  = "myuser";
 		$this->pass = "mypassword";
-		$this->db = "visitfyndb";
+		$this->db = "ikea_hacks_db";
 	}
 }
 

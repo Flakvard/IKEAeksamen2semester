@@ -35,10 +35,10 @@
 				$query->bind_param("ssss",$obj->category,$obj->name,$obj->description,$obj->updatedAt);
 				$query->execute();
 				$res= $query->get_result();
-				$last_id=$this->condb->insert_id; //fanger id for eventet
+				$last_id=$this->condb->insert_id; //Catches the id for the event
 				$query->close();
-				$this->close_db(); // lukker datebasen
-				return $last_id; //returner id for eventet
+				$this->close_db(); // Closes the datebase
+				return $last_id; //returns the id for event
 			}
 			catch (Exception $e) 
 			{
@@ -79,10 +79,10 @@
                 {$query=$this->condb->prepare("SELECT * FROM event_template");	}		
 				
 				$query->execute();
-				$res=$query->get_result();	//setter query i en variabel
-				$query->close();		//lukker query
-				$this->close_db();      //lukker datebasen
-                return $res;	//returnerer listen af events fra query variabelen 
+				$res=$query->get_result();	//Sets query in a variable
+				$query->close();		//closes query
+				$this->close_db();      //closes datebase
+                return $res;	//Returns list of events from the query variable 
 			}
 			catch(Exception $e)
 			{

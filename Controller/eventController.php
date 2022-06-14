@@ -100,9 +100,9 @@ class eventController
                     //call insert record            
                     $pid = $this->objsm->insertRecord($sporttb);
                     if ($pid > 0) {
-                        $this->list(); //tilføjer eventet til listen af events 
+                        $this->list(); //add the event to the list of events 
                     } else {
-                        echo "Somthing is wrong..., try again."; //hvis ikke noget id bliver returneret
+                        echo "Somthing is wrong..., try again."; //If no id is returned
                     }
                 } else {
                     $_SESSION['sporttbl0'] = serialize($sporttb); //add session obj           
