@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2022 at 12:35 PM
+-- Generation Time: Jun 14, 2022 at 11:55 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -103,6 +103,41 @@ WHERE product.name = ProductName
 GROUP by product.name;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insert_user_info` (IN `UserEmail` VARCHAR(50), IN `UserPassword` VARCHAR(255), IN `UserFirstName` VARCHAR(50), IN `UserLastName` VARCHAR(50), IN `UserPhoneNo` VARCHAR(30), OUT `user_id` BIGINT(50), IN `Postnr` VARCHAR(50), IN `city` VARCHAR(50), IN `Country` VARCHAR(50), IN `Address` VARCHAR(50), OUT `contributoruser_id` BIGINT(50))  BEGIN
+	DECLARE country_ID int(11);
+   
+    INSERT INTO `ikea_hacks_db`.`user` (`UserEmail`, `UserPassword`, `UserFirstName`, `UserLastName`, `UserPhoneNo`, `UserID`)
+    VALUES (UserEmail, UserPassword, UserFirstName, UserLastName, UserPhoneNo, user_id); -- add user into userlist
+
+    -- If we inserted a row, get the new ID
+    if (Select ROW_COUNT() = 1) then 
+	set user_id = LAST_INSERT_ID(); 
+    -- set @s = user_id; -- debugging
+
+	Select CountryID from country where country.CountryNicename = Country into country_ID;
+    -- set @s = country_ID; -- debugging
+    
+    INSERT INTO `ikea_hacks_db`.`useraddress` (`UserPostNo`, `UserCity`, `country_CountryID`, `user_UserID`, `UserAddress`) 
+    VALUES (Postnr, city, country_ID, user_id, Address); -- insert user address
+    
+    INSERT INTO `ikea_hacks_db`.`contributoruser` (`user_UserID`) 
+    VALUES (user_id); -- add user to contributoruser list
+    
+    -- get the new ID for contributoruser_id
+    set contributoruser_id = LAST_INSERT_ID(); 
+    -- set @s = contributoruser_id; -- debugging
+	
+    INSERT INTO `ikea_hacks_db`.`usertierslines` (`contributoruser_ContributorUserID`)
+	VALUES (contributoruser_id); -- set contributoruser to beginner tier
+    
+    end if;
+    
+    Select @s; -- for debugging
+	PREPARE stmt FROM @s;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_search_product_name` (IN `ProductName` VARCHAR(50))  BEGIN
 Select
 product.Name,
@@ -152,6 +187,58 @@ RETURN all_products;
 END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `achievements`
+--
+
+CREATE TABLE `achievements` (
+  `AchievementsID` bigint(50) NOT NULL,
+  `AchievementName` varchar(50) NOT NULL,
+  `administratoruser_AdministratorUserID` bigint(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `achievements`
+--
+
+INSERT INTO `achievements` (`AchievementsID`, `AchievementName`, `administratoruser_AdministratorUserID`) VALUES
+(1, 'Upload din første hack', 1),
+(2, 'Medvirk på \"Ugens top\"', 1),
+(3, 'Modtag en 5/5 rating på et hack', 1),
+(4, 'Skriv en kommentar på et hack', 2),
+(5, 'Medvirk på \"Trending\"', 2),
+(6, 'Modtag 100 kommentare', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `achievementsuserlines`
+--
+
+CREATE TABLE `achievementsuserlines` (
+  `AchievementsUserLinesID` bigint(50) NOT NULL,
+  `achievements_AchievementsID` bigint(50) NOT NULL,
+  `contributoruser_ContributorUserID` bigint(50) NOT NULL,
+  `AchievementAction` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `achievementsuserlines`
+--
+
+INSERT INTO `achievementsuserlines` (`AchievementsUserLinesID`, `achievements_AchievementsID`, `contributoruser_ContributorUserID`, `AchievementAction`) VALUES
+(1, 5, 3, 1),
+(2, 2, 3, 1),
+(3, 1, 4, 1),
+(4, 3, 3, 1),
+(5, 4, 1, 1),
+(6, 4, 2, 1),
+(7, 4, 3, 1),
+(8, 4, 4, 1),
+(9, 4, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -250,7 +337,12 @@ INSERT INTO `contributoruser` (`ContributorUserID`, `user_UserID`) VALUES
 (2, 3),
 (3, 4),
 (4, 5),
-(5, 9);
+(5, 9),
+(6, 16),
+(7, 18),
+(8, 19),
+(9, 20),
+(10, 21);
 
 -- --------------------------------------------------------
 
@@ -768,7 +860,18 @@ INSERT INTO `user` (`UserID`, `UserEmail`, `UserPassword`, `UserCreated_at`, `Us
 (6, 'Soren@hotmail.com', '123123', '2022-06-13 13:55:27', 'Søren', 'Larsen', '3232321'),
 (7, 'test@hotmail.com', '123123', '2022-06-13 13:56:01', 'test', 'test2', '3232321'),
 (8, 'test@hotmail.com', '123123', '2022-06-13 15:05:12', 'test', 'test2', '3232321'),
-(9, 'test@hotmail.com', '123123', '2022-06-13 15:07:21', 'test', 'test2', '3232321');
+(9, 'Peter@outlookl.com', '123123', '2022-06-13 15:07:21', 'Peter', 'Petersen', '3232321'),
+(11, 'testsp@gmail.com', 'testpwsp', '2022-06-14 17:22:06', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(12, 'testsp@gmail.com', 'testpwsp', '2022-06-14 17:32:07', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(13, 'testsp@gmail.com', 'testpwsp', '2022-06-14 17:33:01', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(14, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:02:26', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(15, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:11:50', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(16, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:20:39', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(17, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:45:10', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(18, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:48:43', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(19, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:52:28', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
+(20, 'UserEmail', 'UserPassword', '2022-06-14 22:28:23', 'UserFirstName', 'UserLastName', 'UserPhoneNo'),
+(21, 'susa@hto.com', '$2y$10$jWA6lhwKeX8jTcFBq/eAe.aIPqISwG5HZp3/z3VGUNHKti2Zfkisa', '2022-06-14 22:45:39', 'sus', 'elis', '21022');
 
 -- --------------------------------------------------------
 
@@ -797,7 +900,67 @@ INSERT INTO `useraddress` (`UserAddressID`, `UserPostNo`, `UserCity`, `country_C
 (5, '3200', 'Trøllanes', 58, 5, 'Bekkubakki 4'),
 (6, '5000', 'Odense', 58, 6, 'Ved siden af fakta 5'),
 (7, '5000', 'Odense', 58, 8, 'test 2'),
-(8, '5000', 'Odense', 58, 9, 'test 2');
+(8, '5000', 'Odense', 58, 9, 'Hos morfar'),
+(9, '7000', 'Frederica', 56, 15, 'úti á bø'),
+(10, '7000', 'Frederica', 56, 16, 'úti á bø'),
+(11, '7000', 'Frederica', NULL, 18, 'úti á bø'),
+(12, '7000', 'Frederica', 80, 19, 'úti á bø'),
+(13, 'UserPostNo', 'UserCity', 58, 20, 'UserAddress'),
+(14, '7000', 'Odense', 58, 21, 'Address 2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usertiers`
+--
+
+CREATE TABLE `usertiers` (
+  `UserTiersID` bigint(50) NOT NULL,
+  `UserTiersName` varchar(50) NOT NULL,
+  `administratoruser_AdministratorUserID` bigint(50) NOT NULL,
+  `ProductUploadTier` int(50) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `usertiers`
+--
+
+INSERT INTO `usertiers` (`UserTiersID`, `UserTiersName`, `administratoruser_AdministratorUserID`, `ProductUploadTier`) VALUES
+(1, 'Veteran', 1, 1),
+(2, 'Elite', 2, 2),
+(3, 'Pro', 2, 5),
+(4, 'Master', 2, 10),
+(5, 'Legendary', 1, 50),
+(6, 'Beginner', 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usertierslines`
+--
+
+CREATE TABLE `usertierslines` (
+  `UserTierslinesID` bigint(50) NOT NULL,
+  `usertiers_UserTiersID` bigint(50) NOT NULL DEFAULT 6,
+  `contributoruser_ContributorUserID` bigint(50) NOT NULL,
+  `UserTierLineAction` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `usertierslines`
+--
+
+INSERT INTO `usertierslines` (`UserTierslinesID`, `usertiers_UserTiersID`, `contributoruser_ContributorUserID`, `UserTierLineAction`) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 1),
+(3, 3, 3, 1),
+(4, 2, 4, 1),
+(5, 6, 5, 1),
+(8, 6, 6, 1),
+(9, 6, 7, 1),
+(10, 6, 8, 1),
+(11, 6, 9, 1),
+(12, 6, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -869,7 +1032,9 @@ CREATE TABLE `vw_contributorusers` (
 ,`Comments made` bigint(21)
 ,`Favourits` bigint(21)
 ,`Rates given` bigint(21)
-,`Rates avg. given` decimal(53,4)
+,`Rates avg. given` decimal(14,4)
+,`Total Achievements` bigint(21)
+,`UserTiersName` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -901,7 +1066,7 @@ CREATE TABLE `vw_product_info_with_photo` (
 ,`Created by lname` varchar(50)
 ,`UnderCategoriesName` varchar(45)
 ,`CategoriesName` varchar(45)
-,`photoupload_PhotoUploadID` bigint(50)
+,`PhotoUpload` mediumblob
 );
 
 -- --------------------------------------------------------
@@ -938,7 +1103,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_contributorusers`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_contributorusers`  AS SELECT `contributoruser`.`ContributorUserID` AS `ContributorUserID`, `user`.`UserFirstName` AS `UserFirstName`, `user`.`UserLastName` AS `UserLastName`, `user`.`UserEmail` AS `UserEmail`, `country`.`CountryPhonecode` AS `CountryPhonecode`, `user`.`UserPhoneNo` AS `UserPhoneNo`, `useraddress`.`UserAddress` AS `UserAddress`, `useraddress`.`UserCity` AS `UserCity`, `useraddress`.`UserPostNo` AS `UserPostNo`, `country`.`CountryNicename` AS `CountryNicename`, count(distinct `product`.`ProductID`) AS `Total products created`, count(distinct `productcomments`.`ProductCommentID`) AS `Comments made`, count(distinct `favouriteproduct`.`FavouriteProductID`) AS `Favourits`, count(distinct `rateproduct`.`RateProductID`) AS `Rates given`, avg(distinct `rateproduct`.`RateProductID`) AS `Rates avg. given` FROM (((((((`user` join `contributoruser` on(`user`.`UserID` = `contributoruser`.`user_UserID`)) join `useraddress` on(`useraddress`.`user_UserID` = `contributoruser`.`user_UserID`)) join `country` on(`country`.`CountryID` = `useraddress`.`country_CountryID`)) left join `product` on(`product`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `productcomments` on(`productcomments`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `favouriteproduct` on(`favouriteproduct`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `rateproduct` on(`rateproduct`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) GROUP BY `contributoruser`.`ContributorUserID` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_contributorusers`  AS SELECT `contributoruser`.`ContributorUserID` AS `ContributorUserID`, `user`.`UserFirstName` AS `UserFirstName`, `user`.`UserLastName` AS `UserLastName`, `user`.`UserEmail` AS `UserEmail`, `country`.`CountryPhonecode` AS `CountryPhonecode`, `user`.`UserPhoneNo` AS `UserPhoneNo`, `useraddress`.`UserAddress` AS `UserAddress`, `useraddress`.`UserCity` AS `UserCity`, `useraddress`.`UserPostNo` AS `UserPostNo`, `country`.`CountryNicename` AS `CountryNicename`, count(distinct `product`.`ProductID`) AS `Total products created`, count(distinct `productcomments`.`ProductCommentID`) AS `Comments made`, count(distinct `favouriteproduct`.`FavouriteProductID`) AS `Favourits`, count(distinct `rateproduct`.`RateProductID`) AS `Rates given`, avg(distinct `rateproduct`.`RateProductAction`) AS `Rates avg. given`, count(distinct `achievementsuserlines`.`AchievementsUserLinesID`) AS `Total Achievements`, `usertiers`.`UserTiersName` AS `UserTiersName` FROM ((((((((((`user` join `contributoruser` on(`user`.`UserID` = `contributoruser`.`user_UserID`)) join `useraddress` on(`useraddress`.`user_UserID` = `contributoruser`.`user_UserID`)) join `country` on(`country`.`CountryID` = `useraddress`.`country_CountryID`)) left join `product` on(`product`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `productcomments` on(`productcomments`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `favouriteproduct` on(`favouriteproduct`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `rateproduct` on(`rateproduct`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `achievementsuserlines` on(`achievementsuserlines`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `usertierslines` on(`usertierslines`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) left join `usertiers` on(`usertiers`.`UserTiersID` = `usertierslines`.`usertiers_UserTiersID`)) GROUP BY `contributoruser`.`ContributorUserID` ;
 
 -- --------------------------------------------------------
 
@@ -956,11 +1121,26 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_product_info_with_photo`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_product_info_with_photo`  AS SELECT `product`.`ProductID` AS `ProductID`, `product`.`Name` AS `name`, `user`.`UserFirstName` AS `Created by fname`, `user`.`UserLastName` AS `Created by lname`, `undercategories`.`UnderCategoriesName` AS `UnderCategoriesName`, `categories`.`CategoriesName` AS `CategoriesName`, `product`.`photoupload_PhotoUploadID` AS `photoupload_PhotoUploadID` FROM (((((`user` join `contributoruser` on(`user`.`UserID` = `contributoruser`.`user_UserID`)) join `product` on(`product`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) join `categoryproductlines` on(`categoryproductlines`.`product_ProductID` = `product`.`ProductID`)) join `undercategories` on(`undercategories`.`UnderCategoriesID` = `categoryproductlines`.`undercategories_UnderCategoriesID`)) join `categories` on(`categories`.`CategoriesID` = `undercategories`.`categories_CategoriesID`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_product_info_with_photo`  AS SELECT `product`.`ProductID` AS `ProductID`, `product`.`Name` AS `name`, `user`.`UserFirstName` AS `Created by fname`, `user`.`UserLastName` AS `Created by lname`, `undercategories`.`UnderCategoriesName` AS `UnderCategoriesName`, `categories`.`CategoriesName` AS `CategoriesName`, `photoupload`.`PhotoUploadImage` AS `PhotoUpload` FROM ((((((`user` join `contributoruser` on(`user`.`UserID` = `contributoruser`.`user_UserID`)) join `product` on(`product`.`contributoruser_ContributorUserID` = `contributoruser`.`ContributorUserID`)) join `categoryproductlines` on(`categoryproductlines`.`product_ProductID` = `product`.`ProductID`)) join `undercategories` on(`undercategories`.`UnderCategoriesID` = `categoryproductlines`.`undercategories_UnderCategoriesID`)) join `categories` on(`categories`.`CategoriesID` = `undercategories`.`categories_CategoriesID`)) left join `photoupload` on(`photoupload`.`PhotoUploadID` = `product`.`photoupload_PhotoUploadID`)) ;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `achievements`
+--
+ALTER TABLE `achievements`
+  ADD PRIMARY KEY (`AchievementsID`),
+  ADD KEY `FK_AchievementAdministratorUserID` (`administratoruser_AdministratorUserID`);
+
+--
+-- Indexes for table `achievementsuserlines`
+--
+ALTER TABLE `achievementsuserlines`
+  ADD PRIMARY KEY (`AchievementsUserLinesID`),
+  ADD KEY `FK_AchievementLineAchievementID` (`achievements_AchievementsID`),
+  ADD KEY `FK_AchievementLineContributorUser` (`contributoruser_ContributorUserID`);
 
 --
 -- Indexes for table `administratoruser`
@@ -1075,8 +1255,35 @@ ALTER TABLE `useraddress`
   ADD KEY `FK_UserID` (`user_UserID`);
 
 --
+-- Indexes for table `usertiers`
+--
+ALTER TABLE `usertiers`
+  ADD PRIMARY KEY (`UserTiersID`),
+  ADD KEY `FK_usertierAdministrationsUser` (`administratoruser_AdministratorUserID`);
+
+--
+-- Indexes for table `usertierslines`
+--
+ALTER TABLE `usertierslines`
+  ADD PRIMARY KEY (`UserTierslinesID`),
+  ADD KEY `FK_UsertierlineContributorUser` (`contributoruser_ContributorUserID`),
+  ADD KEY `FK_UsertierlineUsertierID` (`usertiers_UserTiersID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `achievements`
+--
+ALTER TABLE `achievements`
+  MODIFY `AchievementsID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `achievementsuserlines`
+--
+ALTER TABLE `achievementsuserlines`
+  MODIFY `AchievementsUserLinesID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `administratoruser`
@@ -1100,7 +1307,7 @@ ALTER TABLE `categoryproductlines`
 -- AUTO_INCREMENT for table `contributoruser`
 --
 ALTER TABLE `contributoruser`
-  MODIFY `ContributorUserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ContributorUserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `country`
@@ -1130,17 +1337,42 @@ ALTER TABLE `rateproduct`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `UserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `useraddress`
 --
 ALTER TABLE `useraddress`
-  MODIFY `UserAddressID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `UserAddressID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `usertiers`
+--
+ALTER TABLE `usertiers`
+  MODIFY `UserTiersID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `usertierslines`
+--
+ALTER TABLE `usertierslines`
+  MODIFY `UserTierslinesID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `achievements`
+--
+ALTER TABLE `achievements`
+  ADD CONSTRAINT `FK_AchievementAdministratorUserID` FOREIGN KEY (`administratoruser_AdministratorUserID`) REFERENCES `administratoruser` (`AdministratorUserID`);
+
+--
+-- Constraints for table `achievementsuserlines`
+--
+ALTER TABLE `achievementsuserlines`
+  ADD CONSTRAINT `FK_AchievementLineAchievementID` FOREIGN KEY (`achievements_AchievementsID`) REFERENCES `achievements` (`AchievementsID`),
+  ADD CONSTRAINT `FK_AchievementLineContributorUser` FOREIGN KEY (`contributoruser_ContributorUserID`) REFERENCES `contributoruser` (`ContributorUserID`);
 
 --
 -- Constraints for table `administratoruser`
@@ -1228,6 +1460,19 @@ ALTER TABLE `undercategories`
 ALTER TABLE `useraddress`
   ADD CONSTRAINT `FK_UserAddressCountry` FOREIGN KEY (`country_CountryID`) REFERENCES `country` (`CountryID`),
   ADD CONSTRAINT `FK_UserID` FOREIGN KEY (`user_UserID`) REFERENCES `user` (`UserID`);
+
+--
+-- Constraints for table `usertiers`
+--
+ALTER TABLE `usertiers`
+  ADD CONSTRAINT `FK_usertierAdministrationsUser` FOREIGN KEY (`administratoruser_AdministratorUserID`) REFERENCES `administratoruser` (`AdministratorUserID`);
+
+--
+-- Constraints for table `usertierslines`
+--
+ALTER TABLE `usertierslines`
+  ADD CONSTRAINT `FK_UsertierlineContributorUser` FOREIGN KEY (`contributoruser_ContributorUserID`) REFERENCES `contributoruser` (`ContributorUserID`),
+  ADD CONSTRAINT `FK_UsertierlineUsertierID` FOREIGN KEY (`usertiers_UserTiersID`) REFERENCES `usertiers` (`UserTiersID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
