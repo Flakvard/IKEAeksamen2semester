@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username_err = "Please enter a username.";
     } else {
         // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE username = :username";
+        $sql = "SELECT UserID FROM user WHERE UserEmail = :username";
         $pdo = open_database_connection();
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
@@ -108,9 +108,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($navn_err) && empty($efternavn_err) && empty($tlf_err) && empty($postnr_err) && empty($land_err) && empty($by_err)) {
 
         // Prepare an insert statement
-        $sql = "INSERT INTO user (UserEmail, UserPassword, UserFirstName, UserLastName, UserPhoneNo) VALUES (:UserEmail, :UserPassword, :UserFirstName, :UserLastName, :UserPhoneNo)
-                INSERT INTO useraddress (country_CountryID, UserPostNo, UserCity) VALUES (:country_CountryID, :UserPostNo, :UserCity)";
-        
+        $sql = 'CALL sp_insert_user_info(:UserEmail, :UserPassword, :UserFirstName, :UserLastName, :UserPhoneNo, @userid, :UserPostNo, :UserCity, :Country, :UserAddress, @contributoruserid)';
+        //INSERT INTO user (UserEmail, UserPassword, UserFirstName, UserLastName, UserPhoneNo) VALUES (:UserEmail, :UserPassword, :UserFirstName, :UserLastName, :UserPhoneNo)
+
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
             $stmt->bindParam(":UserEmail", $param_username, PDO::PARAM_STR);
@@ -118,9 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(":UserFirstName", $param_navn, PDO::PARAM_STR);
             $stmt->bindParam(":UserLastName", $param_efternavn, PDO::PARAM_STR);
             $stmt->bindParam(":UserPhoneNo", $param_tlf, PDO::PARAM_STR);
-            $stmt->bindParam(":country_CountryID", $param_land, PDO::PARAM_STR);
+            //$stmt->bindParam(":userid", $param_userid, PDO::PARAM_STR);
+            $stmt->bindParam(":Country", $param_land, PDO::PARAM_STR);
             $stmt->bindParam(":UserCity", $param_by, PDO::PARAM_STR);
             $stmt->bindParam(":UserPostNo", $param_postnr, PDO::PARAM_STR);
+            $stmt->bindParam(":UserAddress", $param_address, PDO::PARAM_STR);
+            //$stmt->bindParam(":contributoruserid", $param_contrid, PDO::PARAM_STR);
 
             // Set parameters
             $param_username = $username;
@@ -130,9 +133,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_land = $land;
             $param_by = $by;
             $param_postnr = $postnr;
+            $param_address = "Address 2";
+            //$param_userid = "@userid";
+            //$param_contrid = "@contributoruserid";
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
 
-            // Attempt to execute the prepared statement
+            // Attempt to execute the stored procedure
             if ($stmt->execute()) {
                 // Redirect to login page
                 header("location: ../index.php");

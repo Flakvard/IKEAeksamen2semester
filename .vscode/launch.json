@@ -8,7 +8,7 @@
             "name": "Launch Edge",
             "request": "launch",
             "type": "msedge",
-            "url": "http://localhost/modul-opgave-visitfyn/VisitFyn/",
+            "url": "http://localhost/IKEAeksamen2semester/",
             "webRoot": "${workspaceFolder}"
         },
         {

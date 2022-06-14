@@ -36,8 +36,8 @@
                 <div class="col-md-12">
                     <div class="page-header clearfix">
                         <a href="welcome.php" class="btn btn-success pull-left">Home</a>
-                        <h2 class="pull-left">Event Details</h2>
-                        <a href="insertEvent.php" class="btn btn-success pull-right">Add New Event (kun virksomheder)</a>
+                        <h2 class="pull-left">Product hack Details</h2>
+                        <a href="insertEvent.php" class="btn btn-success pull-right">Add New Product hack</a>
                         <a href='EventAdmin.php?act=delete&id=". $row['id'] ."' title='Delete Record' data-toggle='tooltip'><i class='fa fa-trash'></i></a>
                     </div>
                     <?php
@@ -46,24 +46,24 @@
                                 echo "<thead>";
                                     echo "<tr>";
                                         echo "<th>#</th>";                                        
-                                        echo "<th>Event Category</th>";
-                                        echo "<th>Event Name</th>";
-                                        echo "<th>Event Description</th>";
-                                        echo "<th>Event Date</th>";
+                                        echo "<th>Product hack Navn</th>";
+                                        echo "<th>Product hack Category</th>";
+                                        echo "<th>Product hack Sub category</th>";
+                                        echo "<th>Product hack Image</th>";
                                         echo "<th>Action</th>";
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>";
-                                        echo "<td>" . $row['id'] . "</td>";                                        
-                                        echo "<td>" . $row['category'] . "</td>";
+                                        echo "<td>" . $row['ProductID'] . "</td>";                                        
                                         echo "<td>" . $row['name'] . "</td>";
-                                        echo "<td>" . $row['description'] . "</td>";
-                                        echo "<td>" . $row['updatedAt'] . "</td>";
+                                        echo "<td>" . $row['CategoriesName'] . "</td>";
+                                        echo "<td>" . $row['UnderCategoriesName'] . "</td>";
+                                        echo "<td>" ."<img src="."'"."data:image/jpg;charset=utf8;base64," . base64_encode($row['PhotoUpload']) ."'". "width='400' height='300'". "/>" . "</td>";
                                         echo "<td>";
-                                        echo "<a href='EventAdmin.php?act=update&id=". $row['id'] ."' title='Update Record' data-toggle='tooltip'><i class='fa fa-edit'></i></a>";
-                                        echo "<a href='EventAdmin.php?act=delete&id=". $row['id'] ."' title='Delete Record' data-toggle='tooltip'><i class='fa fa-trash'></i></a>";                                        
+                                        echo "<a href='EventAdmin.php?act=update&id=". $row['ProductID'] ."' title='Update Record' data-toggle='tooltip'><i class='fa fa-edit'></i></a>";
+                                        echo "<a href='EventAdmin.php?act=delete&id=". $row['ProductID'] ."' title='Delete Record' data-toggle='tooltip'><i class='fa fa-trash'></i></a>";                                        
                                         echo "</td>";
                                     echo "</tr>";
                                 }

@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = :username";
+        $sql = "SELECT UserID, UserEmail, UserPassword FROM user WHERE UserEmail = :username";
         $pdo = open_database_connection();
         
         if($stmt = $pdo->prepare($sql)){
@@ -50,9 +50,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if($stmt->rowCount() == 1){
                     if($row = $stmt->fetch()){
-                        $id = $row["id"];
-                        $username = $row["username"];
-                        $hashed_password = $row["password"];
+                        $id = $row["UserID"];
+                        $username = $row["UserEmail"];
+                        $hashed_password = $row["UserPassword"];
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();

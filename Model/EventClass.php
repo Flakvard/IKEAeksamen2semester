@@ -76,7 +76,7 @@
 					$query->bind_param("i",$id);
 				}
                 else
-                {$query=$this->condb->prepare("SELECT * FROM event_template");	}		
+                {$query=$this->condb->prepare("SELECT * FROM ikea_hacks_db.vw_product_info_with_photo");	}	//event_template	
 				
 				$query->execute();
 				$res=$query->get_result();	//Sets query in a variable

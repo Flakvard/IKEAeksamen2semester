@@ -31,32 +31,37 @@ require_once "../controller/UserRegistration.php";
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
             </div>
             <div class="form-group">
-                <label>Navn</label>
+                <label>Name</label>
                 <input type="text" name="navn" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $navn; ?>">
                 <span class="invalid-feedback"><?php echo $navn_err; ?></span>
             </div>
             <div class="form-group">
-                <label>Efternavn</label>
+                <label>Lastname</label>
                 <input type="text" name="efternavn" class="form-control <?php echo (!empty($efternavn_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $efternavn; ?>">
                 <span class="invalid-feedback"><?php echo $efternavn_err; ?></span>
             </div>
             <div class="form-group">
-                <label>Telefon/mobil nummer</label>
+                <label>Phone number</label>
                 <input type="text" name="tlfnr" class="form-control <?php echo (!empty($tlf_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $tlf; ?>">
                 <span class="invalid-feedback"><?php echo $tlf_err; ?></span>
             </div>
             <div class="form-group">
-                <label>Land</label>
+                <label>Address</label>
+                <input type="text" name="address" class="form-control <?php //echo (!empty($land_err)) ? 'is-invalid' : ''; ?>" value="<?php //echo $land; ?>">
+                <span class="invalid-feedback"><?php //echo $land_err; ?></span>
+            </div>
+            <div class="form-group">
+                <label>Country</label>
                 <input type="text" name="land" class="form-control <?php echo (!empty($land_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $land; ?>">
                 <span class="invalid-feedback"><?php echo $land_err; ?></span>
             </div>
             <div class="form-group">
-                <label>By</label>
+                <label>City</label>
                 <input type="text" name="by" class="form-control <?php echo (!empty($by_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $by; ?>">
                 <span class="invalid-feedback"><?php echo $by_err; ?></span>
             </div>
             <div class="form-group">
-                <label>Postnummer</label>
+                <label>Postnumber</label>
                 <input type="text" name="postnr" class="form-control <?php echo (!empty($postnr_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $postnr; ?>">
                 <span class="invalid-feedback"><?php echo $postnr_err; ?></span>
             </div>
