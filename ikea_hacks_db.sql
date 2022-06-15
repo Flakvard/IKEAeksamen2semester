@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2022 at 10:57 AM
+-- Generation Time: Jun 15, 2022 at 01:59 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -1168,7 +1168,7 @@ ALTER TABLE `achievementsuserlines`
 --
 ALTER TABLE `administratoruser`
   ADD PRIMARY KEY (`AdministratorUserID`),
-  ADD KEY `FK_administratoruser_user.UserID` (`user_UserID`);
+  ADD UNIQUE KEY `UQ_FK_administratoruser_user.UserID` (`user_UserID`) USING BTREE;
 
 --
 -- Indexes for table `categories`
@@ -1182,7 +1182,7 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `categoryproductlines`
   ADD PRIMARY KEY (`CategoryProductLinesID`),
-  ADD KEY `FK_categoryproductline_product.ProductID` (`product_ProductID`),
+  ADD UNIQUE KEY `UQ_FK_categoryproductline_product.ProductID` (`product_ProductID`) USING BTREE,
   ADD KEY `FK_categoryproductlines_undercategories.UnderCategoriesID` (`undercategories_UnderCategoriesID`);
 
 --
@@ -1190,7 +1190,7 @@ ALTER TABLE `categoryproductlines`
 --
 ALTER TABLE `contributoruser`
   ADD PRIMARY KEY (`ContributorUserID`),
-  ADD KEY `FK_contributoruser_user.UserID` (`user_UserID`);
+  ADD UNIQUE KEY `UQ_FK_contributoruser_user.UserID` (`user_UserID`) USING BTREE;
 
 --
 -- Indexes for table `country`
@@ -1212,7 +1212,7 @@ ALTER TABLE `favouriteproduct`
 --
 ALTER TABLE `listedproducts`
   ADD PRIMARY KEY (`ListedProductsID`),
-  ADD KEY `FK_listedproducts_product.ProductID` (`product_ProductID`),
+  ADD UNIQUE KEY `UQ_FK_listedproducts_product.ProductID` (`product_ProductID`) USING BTREE,
   ADD KEY `FK_listedproducts_administratoruser.AdministratorUserID` (`administratoruser_AdministratorUserID`);
 
 --
@@ -1288,7 +1288,7 @@ ALTER TABLE `usertiers`
 --
 ALTER TABLE `usertierslines`
   ADD PRIMARY KEY (`UserTierslinesID`),
-  ADD KEY `FK_Usertierlines_ContributorUser` (`contributoruser_ContributorUserID`),
+  ADD UNIQUE KEY `UQ_FK_Usertierlines_ContributorUser` (`contributoruser_ContributorUserID`) USING BTREE,
   ADD KEY `FK_Usertierlines_UsertiersID` (`usertiers_UserTiersID`);
 
 --
@@ -1323,7 +1323,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `categoryproductlines`
 --
 ALTER TABLE `categoryproductlines`
-  MODIFY `CategoryProductLinesID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `CategoryProductLinesID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `contributoruser`
