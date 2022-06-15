@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2022 at 01:59 PM
+-- Generation Time: Jun 16, 2022 at 01:06 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -343,7 +343,8 @@ INSERT INTO `contributoruser` (`ContributorUserID`, `user_UserID`) VALUES
 (8, 19),
 (9, 20),
 (10, 21),
-(11, 22);
+(11, 22),
+(12, 23);
 
 -- --------------------------------------------------------
 
@@ -698,7 +699,7 @@ CREATE TABLE `product` (
   `Name` varchar(50) DEFAULT NULL,
   `contributoruser_ContributorUserID` bigint(50) DEFAULT NULL,
   `photoupload_PhotoUploadID` bigint(50) DEFAULT NULL,
-  `ProductdateUploaded` datetime DEFAULT NULL,
+  `ProductdateUploaded` datetime DEFAULT current_timestamp(),
   `productListedORDrafted` smallint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -771,7 +772,16 @@ INSERT INTO `rateproduct` (`RateProductID`, `contributoruser_ContributorUserID`,
 (3, 2, 1, 5),
 (4, 4, 3, 5),
 (5, 1, 7, 2),
-(6, 4, 7, 5);
+(6, 4, 7, 5),
+(7, 2, 2, 3),
+(8, 5, 4, 4),
+(9, 3, 5, 5),
+(10, 1, 6, 2),
+(11, 3, 8, 4),
+(12, 2, 9, 5),
+(13, 4, 4, 3),
+(14, 5, 5, 2),
+(15, 2, 6, 5);
 
 -- --------------------------------------------------------
 
@@ -801,7 +811,14 @@ INSERT INTO `steps` (`ProductStepsID`, `product_ProductID`, `ProductStepComment`
 (7, 8, 'Find frem en saks, en sytråd og søm', NULL, 1),
 (8, 8, 'Klip i midten af gardinerne', NULL, 2),
 (9, 8, 'Sy det tilbage', NULL, 3),
-(10, 8, 'Færdigt! Nu har du gardiner, som du selv har ', NULL, 4);
+(10, 8, 'Færdigt! Nu har du gardiner, som du selv har ', NULL, 4),
+(11, 2, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 4),
+(12, 3, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 3),
+(13, 4, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 7),
+(14, 5, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 8),
+(15, 6, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 2),
+(16, 7, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 15),
+(17, 9, 'Lorem ipsum dolor sit amet, consectetur adipi', NULL, 12);
 
 -- --------------------------------------------------------
 
@@ -890,7 +907,8 @@ INSERT INTO `user` (`UserID`, `UserEmail`, `UserPassword`, `UserCreated_at`, `Us
 (19, 'testsp@gmail.com', 'testpwsp', '2022-06-14 18:52:28', 'testfnsp', 'testlnsp', 'TestphonenoSP'),
 (20, 'UserEmail', 'UserPassword', '2022-06-14 22:28:23', 'UserFirstName', 'UserLastName', 'UserPhoneNo'),
 (21, 'susa@hto.com', '$2y$10$jWA6lhwKeX8jTcFBq/eAe.aIPqISwG5HZp3/z3VGUNHKti2Zfkisa', '2022-06-14 22:45:39', 'sus', 'elis', '21022'),
-(22, 'herbert@gmail.com', '$2y$10$G3syopzRuPZHnn/AmByp4uCfsslZqf1fZcLga6sr9na8H72Cq2q1e', '2022-06-15 01:13:14', 'herbert', 'de man', '42342434');
+(22, 'herbert@gmail.com', '$2y$10$G3syopzRuPZHnn/AmByp4uCfsslZqf1fZcLga6sr9na8H72Cq2q1e', '2022-06-15 01:13:14', 'herbert', 'de man', '42342434'),
+(23, 'Kimlarsen@gmail.com', '$2y$10$oTG6SOO/MotCrKHr08ofTO67l7nHyXhQ/2Bhatyaf7ifMlyLnn3U2', '2022-06-15 23:25:50', 'Kim', 'Larsen', '42478744');
 
 -- --------------------------------------------------------
 
@@ -926,7 +944,8 @@ INSERT INTO `useraddress` (`UserAddressID`, `UserPostNo`, `UserCity`, `country_C
 (12, '7000', 'Frederica', 80, 19, 'úti á bø'),
 (13, 'UserPostNo', 'UserCity', 58, 20, 'UserAddress'),
 (14, '7000', 'Odense', 58, 21, 'Address 2'),
-(15, '21313', 'Gana', 210, 22, 'Address 2');
+(15, '21313', 'Gana', 210, 22, 'Address 2'),
+(16, '7000', 'Frederica', 58, 23, 'Address 2');
 
 -- --------------------------------------------------------
 
@@ -981,7 +1000,8 @@ INSERT INTO `usertierslines` (`UserTierslinesID`, `usertiers_UserTiersID`, `cont
 (10, 6, 8, 1),
 (11, 6, 9, 1),
 (12, 6, 10, 1),
-(13, 6, 11, 1);
+(13, 6, 11, 1),
+(14, 6, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -1329,7 +1349,7 @@ ALTER TABLE `categoryproductlines`
 -- AUTO_INCREMENT for table `contributoruser`
 --
 ALTER TABLE `contributoruser`
-  MODIFY `ContributorUserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `ContributorUserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `country`
@@ -1359,19 +1379,19 @@ ALTER TABLE `productcomments`
 -- AUTO_INCREMENT for table `rateproduct`
 --
 ALTER TABLE `rateproduct`
-  MODIFY `RateProductID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `RateProductID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `UserID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `useraddress`
 --
 ALTER TABLE `useraddress`
-  MODIFY `UserAddressID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `UserAddressID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `usertiers`
@@ -1383,7 +1403,7 @@ ALTER TABLE `usertiers`
 -- AUTO_INCREMENT for table `usertierslines`
 --
 ALTER TABLE `usertierslines`
-  MODIFY `UserTierslinesID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `UserTierslinesID` bigint(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
