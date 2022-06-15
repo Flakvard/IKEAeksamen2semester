@@ -109,7 +109,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Prepare an insert statement
         $sql = 'CALL sp_insert_user_info(:UserEmail, :UserPassword, :UserFirstName, :UserLastName, :UserPhoneNo, @userid, :UserPostNo, :UserCity, :Country, :UserAddress, @contributoruserid)';
-        //INSERT INTO user (UserEmail, UserPassword, UserFirstName, UserLastName, UserPhoneNo) VALUES (:UserEmail, :UserPassword, :UserFirstName, :UserLastName, :UserPhoneNo)
 
         if ($stmt = $pdo->prepare($sql)) {
             // Bind variables to the prepared statement as parameters
