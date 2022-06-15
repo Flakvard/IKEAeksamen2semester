@@ -57,3 +57,18 @@ function get_post_by_id($id)
 
     return $row;
 }
+
+function get_all_countries()
+{
+    $connection = open_database_connection();
+
+    $result = $connection->query('SELECT CountryNicename FROM country');
+
+    $posts = [];
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $posts[] = $row;
+    }
+    close_database_connection($connection);
+
+    return $posts;
+}

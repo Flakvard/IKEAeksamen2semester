@@ -19,7 +19,9 @@ require_once "../controller/UserRegistration.php";
         }
     </style>
 </head>
-
+<php 
+ 
+?>
 <body>
     <div class="wrapper">
         <h2>Sign Up</h2>
@@ -51,9 +53,22 @@ require_once "../controller/UserRegistration.php";
                 <span class="invalid-feedback"><?php //echo $land_err; ?></span>
             </div>
             <div class="form-group">
-                <label>Country</label>
-                <input type="text" name="land" class="form-control <?php echo (!empty($land_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $land; ?>">
-                <span class="invalid-feedback"><?php echo $land_err; ?></span>
+                <label for="land">Choose your country from the list:</label>
+                <input list="lande" name="land" id="land" class="form-control <?php echo (!empty($land_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $land; ?>">
+                <datalist id="lande">
+                    <?php
+                    // use a while loop to fetch data 
+                    // from the $all_categories variable 
+                    // and individually display as an option
+                    foreach (get_all_countries() as $i => $countries){;
+                    ?>
+                    <option value="<?php echo $countries["CountryNicename"]?>">
+                    <?php $i; // To show the category name to the user?>
+                    </option>
+                    <?php } ?>
+                </datalist>
+                <span class="invalid-feedback"><?php echo $land_err; ?></span>   
+                
             </div>
             <div class="form-group">
                 <label>City</label>
