@@ -58,7 +58,7 @@ require_once "../controller/UserRegistration.php";
                 <datalist id="lande">
                     <?php
                     // use a while loop to fetch data 
-                    // from the $all_categories variable 
+                    // from the $countries variable 
                     // and individually display as an option
                     foreach (get_all_countries() as $i => $countries){;
                     ?>
