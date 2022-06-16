@@ -44,12 +44,12 @@
                             echo "<table class='table table-bordered table-striped'>";
                                 echo "<thead>";
                                     echo "<tr>";
-                                        echo "<th>#</th>";                                        
-                                        echo "<th>Product hack Navn</th>";
-                                        echo "<th>Product hack Category</th>";
-                                        echo "<th>Product hack Sub category</th>";
-                                        echo "<th>Product hack Image</th>";
+                                        echo "<th>DIY Hack ID</th>";                                        
+                                        echo "<th>DIY Hack Navn</th>";
                                         echo "<th>DIY Hack made by</th>";
+                                        echo "<th>DIY Hack Sub category</th>";
+                                        echo "<th>DIY Hack Category</th>";
+                                        echo "<th>DIY Hack Image</th>";
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
@@ -57,10 +57,10 @@
                                     echo "<tr>";
                                         echo "<td>" . $row['ProductID'] . "</td>";                                        
                                         echo "<td>" . $row['name'] . "</td>";
-                                        echo "<td>" . $row['CategoriesName'] . "</td>";
+                                        echo "<td>" . $row['Created by fname'] . " ". $row['Created by lname'] . "</td>";
                                         echo "<td>" . $row['UnderCategoriesName'] . "</td>";
+                                        echo "<td>" . $row['CategoriesName'] . "</td>";
                                         echo "<td>" ."<img src="."'"."data:image/jpg;charset=utf8;base64," . base64_encode($row['PhotoUpload']) ."'". "width='400' height='300'". "/>" . "</td>";
-                                        echo "<td>" . $row['Created by fname'] . "</td>";
                                     echo "</tr>";
                                 }
                                 echo "</tbody>";                            
