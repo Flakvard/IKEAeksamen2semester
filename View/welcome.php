@@ -20,7 +20,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     </style>
 </head>
 <body>
-    <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to VisitFyn.</h1>
+    <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to IKEA Hacks.</h1>
     
     
 
@@ -28,35 +28,13 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <tbody>
         <tr>
             <td style="width: 33.3333%;">
-                <a href="EventAdmin.php" class="btn btn-secondary">Attraktioner <img src="../img/Attraktioner.png"></a>
+                <div data-empty="true" style="text-align: center;"><br></div>
             </td>
             <td style="width: 33.3333%;">
-                 <a href="EventAdmin.php" class="btn btn-secondary">Spise Steder <img src="../img/SpiseSteder.png"></a>
-            </td>
-            <td style="width: 33.3333%;">
-                <a href="EventAdmin.php" class="btn btn-secondary">Events <img src="../img/Events.png"></a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 33.3333%;">
-              <a href="EventAdmin.php" class="btn btn-secondary">Overnatning <img src="../img/Overnatning.png"></a>
-            </td>
-            <td style="width: 33.3333%;">
-                 <a href="EventAdmin.php" class="btn btn-secondary">Aktiviteter <img src="../img/Aktiviteter.png"></a>
-            </td>
-            <td style="width: 33.3333%;">
-                <a href="EventAdmin.php" class="btn btn-secondary">Konferencer <img src="../img/Konferencer.png"></a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 33.3333%;">
-               <a href="EventAdmin.php" class="btn btn-secondary">Transport <img src="../img/Transport.png"></a>
-            </td>
-            <td style="width: 33.3333%;">
-                 <a href="EventAdmin.php" class="btn btn-secondary">Information <img src="../img/Information.png"></a>
+                 <a href="ProductAdmin.php" class="btn btn-secondary">IKEA HACKS <img src="../img/Information.png"></a>
             </td>
             <td style="width: 33.3333%; text-align: center;">
-                <a href="EventAdmin.php" class="btn btn-secondary">Alle <img src="../img/Alle.png"></a>
+                <div data-empty="true" style="text-align: center;"><br></div>
             </td>
         </tr>
         <tr>
